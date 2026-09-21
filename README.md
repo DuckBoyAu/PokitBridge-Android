@@ -1,10 +1,16 @@
-# Pokit Bridge for Android
+# Pokit Bridge
 
-Sideload Android app that reads the **large center readout** on the official [Pokit](https://play.google.com/store/apps/details?id=com.ingenuity.pokit.dev) app and sends it live to a Garmin watch running **Pokit Pro**.
+Sideload Android app that reads the **large center readout** on the official [Pokit](https://play.google.com/store/apps/details?id=com.ingenuity.pokit.dev) app and sends it live to a Garmin **fēnix 8** / **tactix 8** running **Pokit Pro**.
 
 It does **not** replace the official Pokit app. Keep Pokit open and measuring; this app only copies the big number in the middle of that screen.
 
-**Download the APK:** see [Releases](https://github.com/DuckBoyAu/PokitBridge-Android/releases).
+**Latest download (v0.6.2):**
+
+- [PokitBridge.apk](https://github.com/DuckBoyAu/PokitBridge-Android/releases/latest/download/PokitBridge.apk) — Android phone
+- [PokitPro.iq](https://github.com/DuckBoyAu/PokitBridge-Android/releases/latest/download/PokitPro.iq) — Connect IQ store / Garmin upload
+- Watch sideload (USB): pick the `.prg` for your watch from [Releases](https://github.com/DuckBoyAu/PokitBridge-Android/releases/latest)
+
+Phone and watch **must** be this matching pair (App ID `860d8a30d7e84298b4be71bd013e4afa`). Mixing an older APK with a newer watch app (or the other way around) stops live readings.
 
 ---
 
@@ -13,11 +19,37 @@ It does **not** replace the official Pokit app. Keep Pokit open and measuring; t
 - Android phone (tested on Pixel 9 Pro)
 - Official **Pokit** app from Google Play
 - **Garmin Connect** installed and paired with your watch
-- **Pokit Pro** watch app installed from the Connect IQ Store (or your own matching Connect IQ build)
+- A **fēnix 8** or **tactix 8**
+- **Pokit Pro** on the watch (Connect IQ Store, or sideload from this release)
 
 ---
 
-## 1. Pause Google Play Protect (for this install)
+## 1. Install the watch app
+
+### Option A — Connect IQ Store (if the listing is live)
+
+Install **Pokit Pro** from Connect IQ on your phone, then sync the watch.
+
+### Option B — USB sideload
+
+1. Plug the watch in. Choose **MTP** / file transfer if asked.
+2. Copy the matching file into `GARMIN\APPS\`:
+
+   | Watch | File |
+   | --- | --- |
+   | fēnix 8 AMOLED 47mm / 51mm, tactix 8 47mm AMOLED | `PokitPro-fenix847mm.prg` |
+   | fēnix 8 AMOLED 43mm | `PokitPro-fenix843mm.prg` |
+   | fēnix 8 Pro | `PokitPro-fenix8pro47mm.prg` |
+   | fēnix 8 Solar 47mm | `PokitPro-fenix8solar47mm.prg` |
+   | fēnix 8 Solar 51mm, tactix 8 51mm Solar | `PokitPro-fenix8solar51mm.prg` |
+
+3. Eject the watch. Open **Pokit Pro** from the apps list.
+
+You can also upload `PokitPro.iq` from the [release](https://github.com/DuckBoyAu/PokitBridge-Android/releases/latest) on the [Connect IQ developer dashboard](https://apps.garmin.com/developer/dashboard) if you are publishing the listing.
+
+---
+
+## 2. Pause Google Play Protect (for this install)
 
 Play Protect often blocks sideloaded APKs.
 
@@ -36,9 +68,9 @@ If you already started the install and see *Play Protect doesn't recognize this 
 
 ---
 
-## 2. Allow installing unknown apps
+## 3. Allow installing unknown apps
 
-1. Copy `PokitBridge.apk` (from [Releases](https://github.com/DuckBoyAu/PokitBridge-Android/releases)) to the phone, or open the download in Chrome/Files.
+1. Download [PokitBridge.apk](https://github.com/DuckBoyAu/PokitBridge-Android/releases/latest/download/PokitBridge.apk) on the phone, or copy it from a PC.
 2. If Android asks *blocked for your protection*:
    - Open **Settings → Apps → Special app access → Install unknown apps**.
    - Choose **Files**, **Chrome**, or **Drive** (whichever you used).
@@ -47,7 +79,7 @@ If you already started the install and see *Play Protect doesn't recognize this 
 
 ---
 
-## 3. Enable Restricted settings (required for Accessibility)
+## 4. Enable Restricted settings (required for Accessibility)
 
 Sideloaded apps cannot turn on Accessibility until you unlock **Restricted settings** (Android 13 and later).
 
@@ -64,7 +96,7 @@ If Accessibility still says *restricted setting*, repeat step 3–4 after openin
 
 ---
 
-## 4. Use it
+## 5. Use it
 
 1. Keep **Garmin Connect** running in the background.
 2. Open **Pokit Bridge**. You should see `Garmin link ready: <your watch>`.
@@ -83,7 +115,7 @@ You should see the same center number as the phone (for example `0.000`, `-0.007
 | Cannot install APK | Pause Play Protect; allow unknown apps for Files/Chrome |
 | Accessibility is greyed out / restricted | Apps → Pokit Bridge → ⋮ → Allow restricted settings |
 | Watch says Open phone page | Open Pokit Pro on the watch; keep Garmin Connect and Pokit Bridge enabled |
-| Watch not updating | Confirm Bridge log shows `Garmin link ready` and `Center ← …` |
+| Watch not updating | Confirm Bridge log shows `Garmin link ready` and `Center ← …`. Install **both** the latest APK and the matching watch file from this release |
 | Play Protect warning after install | Normal for sideload. You can turn scanning back on after install |
 
 ---
