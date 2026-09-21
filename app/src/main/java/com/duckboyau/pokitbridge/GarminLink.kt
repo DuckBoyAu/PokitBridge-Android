@@ -17,6 +17,7 @@ object GarminLink {
     private var device: IQDevice? = null
     @Volatile private var sending = false
     @Volatile private var sendStartedAt = 0L
+    @Volatile private var lastSuccessAt = 0L
     @Volatile private var pending: HashMap<String, Any>? = null
     @Volatile private var lastSentKey = ""
     private var tickerStarted = false
@@ -24,7 +25,7 @@ object GarminLink {
     private val tick = object : Runnable {
         override fun run() {
             pump()
-            handler.postDelayed(this, 40)
+            handler.postDelayed(this, 200)
         }
     }
 
@@ -61,30 +62,36 @@ object GarminLink {
             "s" to status,
             "d" to (display ?: "")
         )
+        handler.post { pump() }
     }
 
     private fun pump() {
         val inst = iq ?: return
         if (!ready) return
-        if (sending && System.currentTimeMillis() - sendStartedAt > 250) {
+        val now = System.currentTimeMillis()
+        if (sending) {
+            if (now - sendStartedAt < 1500) return
             sending = false
         }
-        if (sending) return
         if (device == null) refreshDevice()
         val dev = device ?: return
         val payload = pending ?: return
         val key = "${payload["d"]}|${payload["v"]}|${payload["m"]}"
-        val now = System.currentTimeMillis()
-        if (key == lastSentKey && now - sendStartedAt < 350) return
+        if (key == lastSentKey && now - lastSuccessAt < 400) return
         sending = true
         sendStartedAt = now
         lastSentKey = key
         try {
             inst.sendMessage(dev, watchApp, payload) { _, _, st ->
-                sending = false
-                if (st != ConnectIQ.IQMessageStatus.SUCCESS) {
-                    lastSentKey = ""
-                    ScrapeHub.log("Watch send ${st.name}")
+                handler.post {
+                    sending = false
+                    if (st == ConnectIQ.IQMessageStatus.SUCCESS) {
+                        lastSuccessAt = System.currentTimeMillis()
+                    } else {
+                        lastSentKey = ""
+                        ScrapeHub.log("Watch send ${st.name}")
+                    }
+                    pump()
                 }
             }
         } catch (e: Exception) {

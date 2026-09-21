@@ -16,7 +16,7 @@ object WatchBridge {
     fun post(value: Float, mode: Int, status: Int, display: String? = null) {
         GarminLink.send(value, mode, status, display)
         val now = System.currentTimeMillis()
-        if (now - lastHttpAt < 2500) return
+        if (now - lastHttpAt < 5000) return
         lastHttpAt = now
         thread(name = "watch-post") {
             try {
