@@ -9,7 +9,7 @@ import com.garmin.android.connectiq.IQDevice
 import com.garmin.android.connectiq.IQDevice.IQDeviceStatus
 
 object GarminLink {
-    private const val APP_ID = "5164386326c4474bbae2c033350ba7cb"
+    private const val APP_ID = "860d8a30d7e84298b4be71bd013e4afa"
     private val watchApp = IQApp(APP_ID)
     private val handler = Handler(Looper.getMainLooper())
     private var iq: ConnectIQ? = null
