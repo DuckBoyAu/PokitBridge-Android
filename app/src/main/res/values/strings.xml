@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pokit Bridge</string>
+    <string name="scrape_description">Reads the live number on the official Pokit app screen and sends it to your Garmin watch. It only looks at the Pokit app.</string>
+</resources>
